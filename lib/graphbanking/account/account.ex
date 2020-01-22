@@ -19,7 +19,7 @@ defmodule Graphbanking.Account do
     """
 
     def list_transactions(account, _) do
-        from(t in Graphbanking.Account.Transaction, where: t.address == ^account.id)
+        from(t in Graphbanking.Account.Transaction, where: t.account_id == ^account.id)
         |> Repo.all
     end
 

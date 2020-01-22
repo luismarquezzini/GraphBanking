@@ -8,7 +8,82 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+Want to test? Please visit [`localhost:4000/api/graphiql`](http://localhost:4000/api/graphiql) from your browser.
+
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+
+What the API does:
+   
+   * Open an account with a starting value
+   * Transfer from an "A account" to a "B account"
+   * Show all bank accounts
+   * Show all bank transactions
+   * Get all infos from one account, including all transactions           
+
+How it Works: 
+
+Query
+
+##### Query all accounts
+
+```
+accounts {
+  id
+  currentBalance
+  transactions {
+    id
+    address
+    amount
+  }
+}
+```
+
+##### Get info from one account
+
+```
+account(id: id) {
+  id
+  currentBalance
+  transactions {
+    id
+    address
+    amount
+  }
+}
+```
+
+##### Get all transactions
+
+```
+transactions {
+  id
+  address
+  amount
+}
+```
+
+Mutations
+
+##### Open an account
+
+```
+createAccount(balance: balance){
+  id
+  currentBalance
+}
+```
+
+##### Transfer money
+
+```
+transferMoney(sender: <sender_uuid>, address: <receiver_uuid>, amount: amount){
+  sender
+  receiver
+  amount
+  msg
+}
+```
+
 
 ## Learn more
 
