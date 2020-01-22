@@ -49,10 +49,14 @@ defmodule Graphbanking.Bank do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_account(attrs \\ %{}) do
-    %Account{}
-    |> Account.changeset(attrs)
-    |> Repo.insert()
+  def create_account(attrs \\ %{}, balance) do
+    if balance < 0 do
+      {:error, "Starting Value can't be negative"}
+    else
+      %Account{current_balance: balance}
+      |> Account.changeset(attrs)
+      |> Repo.insert()
+    end
   end
 
   @doc """

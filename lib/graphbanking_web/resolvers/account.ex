@@ -4,4 +4,8 @@ defmodule GraphbankingWeb.Resolvers.Bank do
     {:ok, Graphbanking.Bank.list_accounts()}
   end
 
+  def create_account(_parent, %{balance: balance}, _resolution) do
+    Graphbanking.Bank.create_account(balance)
+  end
+
 end
