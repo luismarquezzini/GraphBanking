@@ -77,7 +77,7 @@ defmodule Graphbanking.Account do
             |> Repo.insert()
             Graphbanking.Bank.update_account(senderaccount, %{current_balance: updatedvalue_sender})
             Graphbanking.Bank.update_account(receiveraccount, %{current_balance: updatedvalue_receiver})
-            {:ok, %{sender: sender, receiver: address, amount: amount, msg: "Transferido com sucesso"}}
+            {:ok, %{sender: sender, receiver: address, amount: amount, msg: "Succesful Transfer!"}}
           end
 
         end
