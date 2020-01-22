@@ -6,8 +6,9 @@ defmodule Graphbanking.Account.Transaction do
   @foreign_key_type :binary_id
   schema "transactions" do
     field :amount, :float
-    field :address, :binary_id
+    field :address, :string
 
+    belongs_to(:account, Graphbanking.Bank.Account)
     timestamps()
   end
 

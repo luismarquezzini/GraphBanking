@@ -3,9 +3,10 @@ defmodule Graphbanking.Repo.Migrations.CreateTransactions do
 
   def change do
     create table(:transactions, primary_key: false) do
+      add :account_id, references("accounts", type: :binary_id)
       add :id, :uuid, primary_key: true
       add :amount, :float
-      add :address, references(:accounts, on_delete: :nothing, type: :binary_id)
+      add :address, :string
 
       timestamps()
     end

@@ -35,7 +35,7 @@ defmodule Graphbanking.Bank do
       ** (Ecto.NoResultsError)
 
   """
-  def get_account!(id), do: Repo.get!(Account, id)
+  def get_account(id), do: Repo.get!(Account, id)
 
   @doc """
   Creates a account.
@@ -102,7 +102,7 @@ defmodule Graphbanking.Bank do
       %Ecto.Changeset{source: %Account{}}
 
   """
-  def change_account(%Account{} = account) do
-    Account.changeset(account, %{})
+  def change_account(%Account{} = account, balance) do
+    Account.changeset(account, %{current_balance: balance})
   end
 end

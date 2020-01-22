@@ -7,6 +7,7 @@ defmodule Graphbanking.Bank.Account do
   schema "accounts" do
     field :current_balance, :float
 
+    has_many(:transactions, Graphbanking.Account.Transaction, foreign_key: :account_id)
     timestamps()
   end
 

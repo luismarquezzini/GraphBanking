@@ -17,6 +17,12 @@ defmodule Graphbanking.Account do
         [%Transaction{}, ...]
   
     """
+
+    def list_transactions(account, _) do
+        from(t in Graphbanking.Account.Transaction, where: t.address == ^account.id)
+        |> Repo.all
+    end
+
     def list_transactions do
       Repo.all(Transaction)
     end
@@ -49,6 +55,37 @@ defmodule Graphbanking.Account do
         {:error, %Ecto.Changeset{}}
   
     """
+    def transfer_money(attrs \\ %{}, sender, address, amount) do
+      if(amount < 0) do
+        {:error, "Can't transfer negative values"}
+      else
+        senderaccount = Graphbanking.Bank.get_account(sender)
+        receiveraccount = Graphbanking.Bank.get_account(address)
+        senderamount = senderaccount.current_balance
+        receiveramount = receiveraccount.current_balance
+        updatedvalue_sender = senderamount - amount
+        updatedvalue_receiver = receiveramount + amount
+        if(updatedvalue_sender < 0) do
+          {:error, "You don't have sufficient Money"}
+        else
+
+          if(sender == address) do
+            {:error, "you can't transfer money to yourself"}
+          else
+            %Transaction{account_id: sender, address: address, amount: amount}
+            |> Transaction.changeset(attrs)
+            |> Repo.insert()
+            Graphbanking.Bank.update_account(senderaccount, %{current_balance: updatedvalue_sender})
+            Graphbanking.Bank.update_account(receiveraccount, %{current_balance: updatedvalue_receiver})
+            {:ok, %{sender: sender, receiver: address, amount: amount, msg: "Transferido com sucesso"}}
+          end
+
+        end
+      
+      end
+
+    end
+
     def create_transaction(attrs \\ %{}) do
       %Transaction{}
       |> Transaction.changeset(attrs)
@@ -98,6 +135,7 @@ defmodule Graphbanking.Account do
         %Ecto.Changeset{source: %Transaction{}}
   
     """
+
     def change_transaction(%Transaction{} = transaction) do
       Transaction.changeset(transaction, %{})
     end
