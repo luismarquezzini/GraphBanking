@@ -18,9 +18,9 @@ What the API does:
    * Transfer from an "A account" to a "B account"
    * Show all bank accounts
    * Show all bank transactions
-   * Get all infos from one account, including all transactions           
+   * Get all info from one account, including all transactions           
 
-How it Works: 
+How it works: 
 
 Query
 
@@ -34,6 +34,7 @@ accounts {
     id
     address
     amount
+    insertedAt
   }
 }
 ```
@@ -48,6 +49,7 @@ account(id: id) {
     id
     address
     amount
+    insertedAt
   }
 }
 ```
@@ -59,6 +61,7 @@ transactions {
   id
   address
   amount
+  insertedAt
 }
 ```
 
