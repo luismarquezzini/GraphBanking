@@ -8,8 +8,10 @@ defmodule GraphbankingWeb.Resolvers.Bank do
     case Graphbanking.Bank.get_account(id) do
       nil ->
         {:error, "Account ID #{id} not found"}
+
       account ->
         {:ok, account}
+        
     end
   end
 

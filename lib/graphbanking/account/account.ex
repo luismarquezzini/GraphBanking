@@ -55,16 +55,35 @@ defmodule Graphbanking.Account do
         {:error, %Ecto.Changeset{}}
   
     """
+
+    @doc """
+    Transfer money between accounts
+        ## Examples
+  
+        iex> transfer_money(ccf15997-0674-4507-b01f-9f8d54fb55d5, 5835bd5b-7f91-4209-99b2-e2f6870f70e4, 20)
+        {:ok, %{sender: sender, receiver: address, amount: amount, msg: "Succesful Transfer!"}}
+
+        iex> transfer_money(ccf15997-0674-4507-b01f-9f8d54fb55d5, 5835bd5b-7f91-4209-99b2-e2f6870f70e4, -10)
+        {:error, "Can't transfer negative values"}
+
+        iex> transfer_money(ccf15997-0674-4507-b01f-9f8d54fb55d5, 5835bd5b-7f91-4209-99b2-e2f6870f70e4, amount greater than the account balance)
+        {:error, "you can't transfer money to yourself"}
+
+        iex> transfer_money(ccf15997-0674-4507-b01f-9f8d54fb55d5, ccf15997-0674-4507-b01f-9f8d54fb55d5, 20)
+        {:error, "you can't transfer money to yourself"}
+  
+    """
     def transfer_money(attrs \\ %{}, sender, address, amount) do
       if(amount < 0) do
         {:error, "Can't transfer negative values"}
       else
-        senderaccount = Graphbanking.Bank.get_account(sender)
-        receiveraccount = Graphbanking.Bank.get_account(address)
-        senderamount = senderaccount.current_balance
-        receiveramount = receiveraccount.current_balance
-        updatedvalue_sender = senderamount - amount
-        updatedvalue_receiver = receiveramount + amount
+        sender_account = Graphbanking.Bank.get_account(sender)
+        receiver_account = Graphbanking.Bank.get_account(address)
+        sender_amount = sender_account.current_balance
+        receiver_amount = receiver_account.current_balance
+        updatedvalue_sender = sender_amount - amount
+        updatedvalue_receiver = receiver_amount + amount
+
         if(updatedvalue_sender < 0) do
           {:error, "You don't have sufficient Money"}
         else
@@ -75,8 +94,8 @@ defmodule Graphbanking.Account do
             %Transaction{account_id: sender, address: address, amount: amount}
             |> Transaction.changeset(attrs)
             |> Repo.insert()
-            Graphbanking.Bank.update_account(senderaccount, %{current_balance: updatedvalue_sender})
-            Graphbanking.Bank.update_account(receiveraccount, %{current_balance: updatedvalue_receiver})
+            Graphbanking.Bank.update_account(sender_account, %{current_balance: updatedvalue_sender})
+            Graphbanking.Bank.update_account(receiver_account, %{current_balance: updatedvalue_receiver})
             {:ok, %{sender: sender, receiver: address, amount: amount, msg: "Succesful Transfer!"}}
           end
 
