@@ -42,19 +42,6 @@ defmodule Graphbanking.Account do
   
     """
     def get_transaction!(id), do: Repo.get!(Transaction, id)
-  
-    @doc """
-    Creates a Transaction.
-  
-    ## Examples
-  
-        iex> create_transaction(%{field: value})
-        {:ok, %Account{}}
-  
-        iex> create_transaction(%{field: bad_value})
-        {:error, %Ecto.Changeset{}}
-  
-    """
 
     @doc """
     Transfer money between accounts
@@ -104,6 +91,19 @@ defmodule Graphbanking.Account do
       end
 
     end
+
+    @doc """
+    Creates a Transaction.
+  
+    ## Examples
+  
+        iex> create_transaction(%{field: value})
+        {:ok, %Account{}}
+  
+        iex> create_transaction(%{field: bad_value})
+        {:error, %Ecto.Changeset{}}
+  
+    """
 
     def create_transaction(attrs \\ %{}) do
       %Transaction{}
